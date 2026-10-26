@@ -2,10 +2,9 @@
 
 Alternative looks for [ActiveAdmin](https://github.com/activeadmin/activeadmin) 4.
 
-ActiveAdmin 4 looks much better than 3, but it is roomier and only has a sidebar
-menu, which costs a lot of space on dense admin pages: wide tables, many scopes, long
-filter lists. This gem makes it denser and can bring back a horizontal top menu,
-without forking ActiveAdmin or adding a CSS build to your app.
+Configurable layout and density for ActiveAdmin 4: a sidebar or top navigation menu,
+compact sizing and compact scopes. Layered on ActiveAdmin's own CSS and views, with no
+fork and no CSS build.
 
 - **Compact**: ActiveAdmin 4's own layout (sidebar menu), about 25% denser: smaller
   spacing, type and table rows, a narrower filter column, and scopes shown as small chips.
