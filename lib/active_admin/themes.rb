@@ -44,7 +44,7 @@ module ActiveAdmin
       def stylesheets = THEMES.fetch(theme)[:stylesheets]
 
       def css(name = theme)
-        THEMES.fetch(name)[:stylesheets].map { File.read(File.join(Middleware::ASSETS, "#{it}.css")) }.join("\n")
+        THEMES.fetch(name)[:stylesheets].map { |file| File.read(File.join(Middleware::ASSETS, "#{file}.css")) }.join("\n")
       end
 
       def digest = Digest::SHA256.hexdigest(css)[0, 12]
@@ -53,7 +53,7 @@ module ActiveAdmin
       def view_paths
         return [] unless theme
 
-        THEMES.fetch(theme)[:views].map { File.join(ROOT, "app/views/active_admin_themes", it) }
+        THEMES.fetch(theme)[:views].map { |dir| File.join(ROOT, "app/views/active_admin_themes", dir) }
       end
     end
   end

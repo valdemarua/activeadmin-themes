@@ -14,9 +14,9 @@ module ActiveAdmin
 
         controllers = [ActiveAdmin::BaseController]
         controllers += %w[Sessions Passwords Unlocks Registrations Confirmations]
-          .filter_map { "ActiveAdmin::Devise::#{it}Controller".safe_constantize }
+          .filter_map { |name| "ActiveAdmin::Devise::#{name}Controller".safe_constantize }
         controllers.each do |controller|
-          ActiveAdmin::Themes.view_paths.reverse_each { controller.prepend_view_path(it) }
+          ActiveAdmin::Themes.view_paths.reverse_each { |path| controller.prepend_view_path(path) }
         end
       end
     end
