@@ -63,7 +63,9 @@ body { font-size: var(--text-sm); }
   padding-inline: calc(var(--spacing) * 3);
   padding-block: calc(var(--spacing) * 1.5);
 }
-/* Selected: AA's own grey (like the selected menu item), plus a slightly
-   darker border so it still stands out among the chips. */
-.scopes .index-button-selected { border-color: var(--color-gray-300); }
-.dark .scopes .index-button-selected { border-color: var(--color-gray-600); }
+/* Selected: a grey one step darker than AA's (gray-100 is too faint among
+   many chips), with a matching border. */
+.scopes .index-button-selected,
+.scopes .index-button-selected:hover { background-color: var(--color-gray-200); border-color: var(--color-gray-400); }
+.dark .scopes .index-button-selected,
+.dark .scopes .index-button-selected:hover { background-color: var(--color-gray-700); border-color: var(--color-gray-500); }
