@@ -65,5 +65,5 @@ body { font-size: var(--text-sm); }
 }
 /* Selected: AA's own background, with a darker border so it stands out
    among many chips. */
-.scopes .index-button-selected { border-color: var(--color-gray-400); }
-.dark .scopes .index-button-selected { border-color: var(--color-gray-500); }
+.scopes .index-button-selected { border-color: var(--color-gray-300); }
+.dark .scopes .index-button-selected { border-color: var(--color-gray-600); }
