@@ -16,11 +16,10 @@ module ActiveAdmin
         return @app.call(env) unless path.start_with?("/active_admin_themes/")
 
         name = path[%r{\A/active_admin_themes/[^/]+/(\w+)\.css\z}, 1]
-        theme = name && THEMES[name.to_sym]
-        return [404, {"content-type" => "text/plain"}, ["Not found"]] unless theme
+        return [404, {"content-type" => "text/plain"}, ["Not found"]] unless name && THEMES.key?(name.to_sym)
 
-        css = theme[:stylesheets].map { File.read(File.join(ASSETS, "#{it}.css")) }.join("\n")
-        [200, {"content-type" => "text/css; charset=utf-8", "cache-control" => "public, max-age=31536000, immutable"}, [css]]
+        # Cached for a year: the href carries ?v=<digest of the CSS>.
+        [200, {"content-type" => "text/css; charset=utf-8", "cache-control" => "public, max-age=31536000, immutable"}, [Themes.css(name.to_sym)]]
       end
     end
   end

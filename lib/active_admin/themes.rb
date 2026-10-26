@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "digest"
 require_relative "themes/version"
 require_relative "themes/middleware"
 require_relative "themes/railtie" if defined?(Rails::Railtie)
@@ -33,9 +34,20 @@ module ActiveAdmin
 
       def path = "/active_admin_themes/#{VERSION}"
 
-      def stylesheet_href = theme && "#{path}/#{theme}.css"
+      # The URL carries a digest of the theme's CSS, so the long cache the
+      # middleware sends is busted whenever the CSS changes (gem update, or
+      # editing it in development).
+      def stylesheet_href
+        theme && "#{path}/#{theme}.css?v=#{digest}"
+      end
 
       def stylesheets = THEMES.fetch(theme)[:stylesheets]
+
+      def css(name = theme)
+        THEMES.fetch(name)[:stylesheets].map { File.read(File.join(Middleware::ASSETS, "#{it}.css")) }.join("\n")
+      end
+
+      def digest = Digest::SHA256.hexdigest(css)[0, 12]
 
       # Most specific first: classic's partials, then the shared ones.
       def view_paths
