@@ -48,12 +48,19 @@ ActiveAdmin's look for that part. All settings support light and dark mode.
 
 ### Presets
 
-`use` sets a named combination, and resets the settings it doesn't name:
+Instead of `configure`, `use` sets a named combination:
 
 ```ruby
-ActiveAdmin::Themes.use :compact   # density: :compact, scopes: :chips
-ActiveAdmin::Themes.use :classic   # navigation: :top, density: :compact, scopes: :chips, style: :classic
+# config/initializers/active_admin_themes.rb
+ActiveAdmin::Themes.use :compact
 ```
+
+| Preset | Settings |
+|---|---|
+| `:compact` | `density: :compact`, `scopes: :chips` |
+| `:classic` | `navigation: :top`, `density: :compact`, `scopes: :chips`, `style: :classic` |
+
+Settings a preset doesn't name stay at their defaults.
 
 ## With or without activeadmin_assets
 
