@@ -1,0 +1,42 @@
+/*
+ * activeadmin-themes: Compact
+ *
+ * ActiveAdmin 4 is built with Tailwind v4, whose utilities read CSS variables:
+ * every p-*, m-*, gap-*, w-*, h-* is calc(var(--spacing) * n), and text-* reads
+ * --text-*. Lowering them scales the whole admin at once (paddings, the 60-unit
+ * sidebar, the 16-unit header, table cells) without touching any markup.
+ */
+:root {
+  --spacing: 0.1875rem;            /* AA default 0.25rem: 25% tighter everywhere */
+  --text-xs: 0.6875rem;            /* 11px */
+  --text-xs--line-height: 1.4;
+  --text-sm: 0.8125rem;            /* 13px, the size most of AA uses */
+  --text-sm--line-height: 1.45;
+  --text-base: 0.875rem;
+  --text-base--line-height: 1.5;
+  --text-lg: 1rem;
+  --text-xl: 1.125rem;
+  --text-2xl: 1.3125rem;           /* page titles */
+}
+
+body { font-size: var(--text-sm); }
+
+/* Tables: the main reason to compact. Slightly tighter line-height, keep
+   long values on as few lines as reasonable. */
+.data-table th,
+.data-table td { line-height: 1.35; }
+.data-table th { white-space: nowrap; }
+
+/* Scopes: AA renders them as a segmented control; trim inner padding so
+   more fit on one line. */
+.scopes a,
+.scopes button { padding-block: calc(var(--spacing) * 1.5); }
+
+/* Status tags and count badges a touch smaller. */
+.status-tag { font-size: var(--text-xs); }
+
+/* The filters sidebar is a fixed 250px track in AA's layout (not spacing
+   based), so it doesn't shrink with --spacing. */
+@media (min-width: 1024px) {
+  [data-test-page-content] { grid-auto-columns: minmax(0, 210px); }
+}

@@ -1,0 +1,22 @@
+<nav class="aat-nav" aria-label="<%= t('active_admin.toggle_main_navigation_menu') %>">
+  <ul>
+    <% current_menu.items(self).each do |item| %>
+      <% children = item.items(self).presence %>
+      <% url = item.url(self) %>
+      <% current = current_menu_item?(item) %>
+      <% if children %>
+        <%# Opens on hover and on keyboard focus (focus-within): no JS needed. %>
+        <li class="aat-nav__group<%= " is-current" if current %>" data-item-id="<%= item.id %>">
+          <button type="button" class="aat-nav__item" aria-haspopup="true"><%= item.label(self) %> <span aria-hidden="true">▾</span></button>
+          <ul class="aat-nav__dropdown">
+            <% children.each do |child| %>
+              <li><%= link_to child.label(self), child.url(self), child.html_options.merge(class: "aat-nav__dropdown-item#{" is-current" if current_menu_item?(child)}") %></li>
+            <% end %>
+          </ul>
+        </li>
+      <% elsif url.present? %>
+        <li data-item-id="<%= item.id %>"><%= link_to item.label(self), url, item.html_options.merge(class: "aat-nav__item#{" is-current" if current}") %></li>
+      <% end %>
+    <% end %>
+  </ul>
+</nav>
