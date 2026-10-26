@@ -37,6 +37,32 @@ ActiveAdmin::Themes.use :compact   # or :classic
 
 Restart the server. Without `use`, the gem changes nothing.
 
+## Settings
+
+> Coming in the next release. Today the gem has the two fixed themes above:
+> `:compact` and `:classic` are the combinations marked in the table.
+
+Each part of the look is a separate setting, so you can combine them freely, e.g. a
+top menu in ActiveAdmin's own colors at compact density:
+
+```ruby
+ActiveAdmin::Themes.configure do |c|
+  c.navigation = :top
+  c.density    = :compact
+  c.scopes     = :chips
+end
+```
+
+| Setting | Values | Default | What it changes | Compact | Classic |
+|---|---|---|---|---|---|
+| `navigation` | `:sidebar`, `:top` | `:sidebar` | Sidebar menu, or a horizontal top bar with dropdowns and a mobile menu | `:sidebar` | `:top` |
+| `density` | `:default`, `:compact` | `:default` | Spacing, type size, table rows, filter column width, form control padding | `:compact` | `:compact` |
+| `scopes` | `:default`, `:chips` | `:default` | ActiveAdmin's scope buttons, or small chips that fit more per row | `:chips` | `:chips` |
+| `style` | `:default`, `:classic` | `:default` | Colors and surfaces only: ActiveAdmin's own, or a gray top bar and title bar | `:default` | `:classic` |
+
+Every default is ActiveAdmin's own behavior, so an empty `configure` block changes
+nothing. All settings support light and dark mode.
+
 ## With or without activeadmin_assets
 
 The gem works the same however ActiveAdmin's own CSS reaches the browser:
@@ -74,9 +100,8 @@ usual. Classic's colors are CSS variables on `.aat-classic` (`--aat-bar`,
 
 Early. Tested against ActiveAdmin 4.0.0.beta23 and activeadmin_assets 1.3.0. Since
 the gem builds on ActiveAdmin's markup and class names, check your admin after
-upgrading ActiveAdmin while 4.x is in beta. Independent settings (navigation,
-density, scopes, style) will replace the two fixed themes; see
-[docs/PLAN.md](docs/PLAN.md).
+upgrading ActiveAdmin while 4.x is in beta. The settings above will replace the two fixed
+themes; see [docs/PLAN.md](docs/PLAN.md).
 
 ## License
 
