@@ -12,5 +12,5 @@ Gem::Specification.new do |spec|
   spec.files = Dir["lib/**/*", "app/**/*", "README.md", "LICENSE"]
 
   spec.add_dependency "activeadmin", ">= 4.0.0.beta", "< 5"
-  spec.add_dependency "railties", ">= 7.2"
+  spec.add_dependency "railties" # the Rails version comes from activeadmin
 end
