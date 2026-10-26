@@ -55,7 +55,7 @@ body { font-size: var(--text-sm); }
 /* Scopes: AA joins them into one segmented control (shared 1px borders, only
    the outer ends rounded). When many scopes wrap onto several rows the rows
    don't line up and the borders look broken. Separate rounded chips with a
-   small gap wrap cleanly; the selected one is filled so it stands out. */
+   small gap wrap cleanly. */
 .scopes .index-button-group { gap: 0.25rem; }
 .scopes .index-button-group > * { margin-inline-start: 0; }
 .scopes .index-button {
@@ -63,17 +63,7 @@ body { font-size: var(--text-sm); }
   padding-inline: calc(var(--spacing) * 3);
   padding-block: calc(var(--spacing) * 1.5);
 }
-.scopes .index-button-selected,
-.scopes .index-button-selected:hover {
-  background-color: var(--color-gray-900);
-  border-color: var(--color-gray-900);
-  color: var(--color-white);
-}
-.scopes .index-button-selected .scopes-count { background-color: rgb(255 255 255 / 0.2); color: var(--color-white); }
-.dark .scopes .index-button-selected,
-.dark .scopes .index-button-selected:hover {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  color: var(--color-gray-900);
-}
-.dark .scopes .index-button-selected .scopes-count { background-color: rgb(0 0 0 / 0.12); color: var(--color-gray-900); }
+/* Selected: AA's own grey (like the selected menu item), plus a slightly
+   darker border so it still stands out among the chips. */
+.scopes .index-button-selected { border-color: var(--color-gray-300); }
+.dark .scopes .index-button-selected { border-color: var(--color-gray-600); }
