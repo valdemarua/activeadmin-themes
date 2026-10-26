@@ -22,7 +22,7 @@ gem "activeadmin-themes"
 ```
 
 ```ruby
-# config/initializers/active_admin.rb
+# config/initializers/active_admin_themes.rb
 ActiveAdmin::Themes.configure do |c|
   c.navigation = :top
   c.density    = :compact
