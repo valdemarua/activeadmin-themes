@@ -36,7 +36,23 @@ body { font-size: var(--text-sm); }
 .status-tag { font-size: var(--text-xs); }
 
 /* The filters sidebar is a fixed 250px track in AA's layout (not spacing
-   based), so it doesn't shrink with --spacing. */
+   based), so it doesn't follow --spacing. Set explicitly: narrower than AA's,
+   still wide enough for a date range (two date inputs side by side). */
 @media (min-width: 1024px) {
-  [data-test-page-content] { grid-auto-columns: minmax(0, 210px); }
+  [data-test-page-content] { grid-auto-columns: minmax(0, 240px); }
 }
+
+/* Form controls: AA gives them a fixed 8px vertical padding (not --spacing),
+   so they stay ~38px tall otherwise. Inline-end padding is left alone: selects
+   need it for the arrow. */
+.formtastic :is(input:not([type=checkbox], [type=radio], [type=submit], [type=button], [type=file], [type=color]), select, textarea),
+.filters-form :is(input:not([type=checkbox], [type=radio], [type=submit], [type=button]), select) {
+  padding-block: 0.25rem;
+  padding-inline-start: 0.5rem;
+}
+
+/* Batch Actions shares a flex row with the scopes. With many scopes AA lets
+   the button shrink until its label wraps ("Batch / Actions") and stretches it
+   to the full height of the wrapped scopes. Keep it one line, at the top. */
+.index-data-table-toolbar .batch-actions-dropdown { flex-shrink: 0; align-self: flex-start; }
+.index-data-table-toolbar .batch-actions-dropdown-toggle { white-space: nowrap; }
