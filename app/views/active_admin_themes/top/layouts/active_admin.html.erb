@@ -4,9 +4,9 @@
   <title><%= html_head_site_title %></title>
   <%= render "active_admin/html_head" %>
 </head>
-<%# activeadmin-themes Classic: top menu bar instead of AA 4's sidebar, so the
+<%# activeadmin-themes navigation: :top. A top menu bar instead of AA 4's sidebar, so the
     content (and the filters on the right) get the full page width. %>
-<body class="aat-classic bg-white dark:bg-gray-950/95 text-gray-950 dark:text-gray-100 antialiased">
+<body class="aat-top bg-white dark:bg-gray-950/95 text-gray-950 dark:text-gray-100 antialiased">
   <%= render "active_admin/site_header", title: site_title %>
   <%= render "active_admin/page_header", title: @page_title || page_title %>
   <%= render "active_admin/flash_messages" %>

@@ -2,63 +2,72 @@
 
 require "digest"
 require_relative "themes/version"
+require_relative "themes/config"
 require_relative "themes/middleware"
 require_relative "themes/railtie" if defined?(Rails::Railtie)
 
 module ActiveAdmin
-  # Alternative looks for ActiveAdmin 4, layered on top of AA's own CSS:
+  # Configurable layout and density for ActiveAdmin 4:
   #
-  #   ActiveAdmin::Themes.use :compact   # AA 4 layout, denser
-  #   ActiveAdmin::Themes.use :classic   # top menu like AA 1-3, denser
+  #   ActiveAdmin::Themes.configure do |c|
+  #     c.navigation = :top       # :sidebar
+  #     c.density    = :compact   # :default
+  #     c.scopes     = :chips     # :default
+  #     c.style      = :classic   # :default
+  #   end
   #
-  # A theme is plain CSS loaded after AA's stylesheet (so it works with
-  # activeadmin_assets or an app's own Tailwind build) plus, for :classic,
-  # a few partial overrides.
+  #   ActiveAdmin::Themes.use :compact   # or :classic, a preset of the above
+  #
+  # Each setting that differs from ActiveAdmin's default adds plain CSS, loaded
+  # after AA's stylesheet (so it works with activeadmin_assets or an app's own
+  # Tailwind build). navigation: :top also swaps in a few partials.
   module Themes
-    THEMES = {
-      compact: { stylesheets: %w[compact], views: %w[base] },
-      classic: { stylesheets: %w[compact classic], views: %w[classic base] }
-    }.freeze
-
     ROOT = File.expand_path("../..", __dir__)
 
     class << self
-      attr_reader :theme
+      def config = @config ||= Config.new
 
-      def use(name)
-        name = name.to_sym
-        unless THEMES.key?(name)
-          raise ArgumentError,
-                "unknown ActiveAdmin theme #{name.inspect} (#{THEMES.keys.join(", ")})"
+      def configure
+        yield config
+      end
+
+      # Applies a preset. Settings it doesn't name go back to their defaults.
+      def use(preset)
+        settings = PRESETS.fetch(preset.to_sym) do
+          raise ArgumentError, "unknown preset #{preset.to_sym.inspect} (#{PRESETS.keys.join(", ")})"
         end
+        @config = Config.new
+        settings.each { |name, value| config.public_send(:"#{name}=", value) }
+      end
 
-        @theme = name
+      # Back to ActiveAdmin's defaults.
+      def reset!
+        @config = nil
       end
 
       def path = "/active_admin_themes/#{VERSION}"
 
-      # The URL carries a digest of the theme's CSS, so the long cache the
-      # middleware sends is busted whenever the CSS changes (gem update, or
-      # editing it in development).
+      # nil when every setting is ActiveAdmin's default. The URL names the
+      # stylesheets and carries a digest of their CSS, so the long cache the
+      # middleware sends is busted whenever the CSS changes.
       def stylesheet_href
-        theme && "#{path}/#{theme}.css?v=#{digest}"
+        names = config.stylesheets
+        "#{path}/#{names.join("+")}.css?v=#{digest(names)}" if names.any?
       end
 
-      def stylesheets = THEMES.fetch(theme)[:stylesheets]
-
-      def css(name = theme)
-        THEMES.fetch(name)[:stylesheets].map do |file|
-          File.read(File.join(Middleware::ASSETS, "#{file}.css"))
-        end.join("\n")
+      def css(names = config.stylesheets)
+        names.map { |name| File.read(File.join(Middleware::ASSETS, "#{name}.css")) }.join("\n")
       end
 
-      def digest = Digest::SHA256.hexdigest(css)[0, 12]
+      def digest(names = config.stylesheets) = Digest::SHA256.hexdigest(css(names))[0, 12]
 
-      # Most specific first: classic's partials, then the shared ones.
+      # The gem's partials for ActiveAdmin's controllers, most specific first.
+      # None when every setting is ActiveAdmin's default.
       def view_paths
-        return [] unless theme
+        return [] if config.stylesheets.empty?
 
-        THEMES.fetch(theme)[:views].map { |dir| File.join(ROOT, "app/views/active_admin_themes", dir) }
+        dirs = config.navigation == :top ? %w[top base] : %w[base]
+        dirs.map { |dir| File.join(ROOT, "app/views/active_admin_themes", dir) }
       end
     end
   end

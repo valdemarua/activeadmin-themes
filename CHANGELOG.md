@@ -2,4 +2,6 @@
 
 ## Unreleased
 
-- Compact and Classic themes for ActiveAdmin 4, served as plain CSS by the gem's middleware.
+- Settings for ActiveAdmin 4: `navigation` (`:sidebar`, `:top`), `density` (`:default`, `:compact`), `scopes` (`:default`, `:chips`) and `style` (`:default`, `:classic`), set with `ActiveAdmin::Themes.configure`.
+- Presets `ActiveAdmin::Themes.use :compact` and `:classic`.
+- Plain CSS served by the gem's middleware: works with or without activeadmin_assets.

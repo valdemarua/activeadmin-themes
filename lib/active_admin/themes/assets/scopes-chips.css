@@ -1,0 +1,25 @@
+/*
+ * scopes: :chips
+ *
+ * AA joins the scopes into one segmented control (shared 1px borders, only the
+ * outer ends rounded). When many scopes wrap onto several rows the rows don't
+ * line up and the borders look broken. Separate rounded chips with a small gap
+ * wrap cleanly.
+ */
+.scopes .index-button-group { gap: 0.25rem; }
+.scopes .index-button-group > * { margin-inline-start: 0; }
+.scopes .index-button {
+  border-radius: var(--radius-md);
+  padding-inline: calc(var(--spacing) * 3);
+  padding-block: calc(var(--spacing) * 1.5);
+}
+/* Selected: AA's own background, with a darker border so it stands out
+   among many chips. */
+.scopes .index-button-selected { border-color: var(--color-gray-300); }
+.dark .scopes .index-button-selected { border-color: var(--color-gray-600); }
+
+/* Batch Actions shares a flex row with the scopes. With many scopes AA lets
+   the button shrink until its label wraps ("Batch / Actions") and stretches it
+   to the full height of the wrapped scopes. Keep it one line, at the top. */
+.index-data-table-toolbar .batch-actions-dropdown { flex-shrink: 0; align-self: flex-start; }
+.index-data-table-toolbar .batch-actions-dropdown-toggle { white-space: nowrap; }

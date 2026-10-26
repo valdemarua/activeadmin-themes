@@ -20,37 +20,29 @@ configurable without forking AA or adding an asset build, so an app can move to 
   custom Tailwind config or Tailwind classes that AA doesn't already use. That is
   why this gem uses plain CSS and its own `aat-*` classes.
 
-## Settings (next)
+## Settings
 
-Replace the two fixed themes with independent settings. The old themes become
-combinations of them.
-
-```ruby
-ActiveAdmin::Themes.configure do |c|
-  c.navigation = :top       # :sidebar (AA default)
-  c.density    = :compact   # :default
-  c.scopes     = :chips     # :default
-  c.style      = :default   # :classic (gray top bar, title-bar gradient)
-end
-```
+Independent settings; the two original themes are presets of them. User-facing
+reference: the README.
 
 | Setting | Changes | How |
 |---|---|---|
 | `navigation` | sidebar menu or top bar with dropdowns | layout swap: overrides the layout, `_site_header`, `_main_navigation` |
 | `density` | spacing, type size, table rows, filter column width, control padding | CSS variables |
-| `scopes` | AA's scope buttons or compact chips | CSS |
-| `style` | colors and surfaces only | CSS variables (`--aat-bar`, …) |
+| `scopes` | AA's scope buttons or chips | CSS |
+| `style` | colors and surfaces only | `--aat-*` variables, title bar |
 
 Design:
 
-- Settings render as attributes on `<html>` (`data-aat-navigation="top"`, …). One
-  stylesheet has rules scoped by those attributes, so any combination works without
-  a stylesheet per combination, and a per-admin toggle stays possible later.
+- One small CSS file per non-default value. The middleware serves the ones in use
+  as one stylesheet, named in the URL (`density-compact+scopes-chips.css`), so every
+  combination works without a stylesheet per combination, with no runtime JS and no
+  attributes on `<html>`.
 - No configuration means no change: every setting defaults to AA's own behavior.
 - Every combination is allowed. A combination that renders badly is a bug, not
   something to forbid with validation.
-- Top navigation needs a version in AA's default style (white bar, AA's colors).
-  Today it only exists in the `classic` style.
+- Later, if wanted: a per-admin toggle (e.g. density) would need the settings as
+  attributes on `<html>` and CSS scoped by them.
 - Replace the copied `_html_head` with a smaller hook if possible, so the gem
   follows AA's partial instead of drifting from it.
 
@@ -65,8 +57,8 @@ Design:
 
 ## Status
 
-- Spike done against ActiveAdmin 4.0.0.beta23 and activeadmin_assets 1.3.0:
-  `compact` (density + scope chips) and `classic` (top navigation in the gray style)
-  work in light and dark mode, including the mobile menu and nav dropdowns.
-- Next: the settings refactor, top navigation in AA's default style, then the test
-  setup, README and the first release (after AA 4.0 final, or pinned to the beta).
+- Done against ActiveAdmin 4.0.0.beta23 and activeadmin_assets 1.3.0: the four
+  settings and two presets, top navigation in AA's default and classic styles, light
+  and dark mode, unit and integration tests on Rails 7.2, 8.0 and 8.1, CI.
+- Next: a generic demo app with README screenshots in a minimal browser frame, then
+  the first release (after AA 4.0 final, or pinned to the beta).

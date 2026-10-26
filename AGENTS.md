@@ -6,15 +6,20 @@ Design and roadmap: `docs/PLAN.md`. Read it before changing the public API.
 
 ## Architecture
 
-- `lib/active_admin/themes.rb`: the public API (`ActiveAdmin::Themes.use`, moving to
-  `configure`), the stylesheet URL with its content digest, and the view paths.
-- `lib/active_admin/themes/middleware.rb`: serves the CSS from the gem at
-  `/active_admin_themes/<version>/<name>.css?v=<digest>` with a one-year immutable cache.
+- `lib/active_admin/themes.rb`: the public API (`configure`, `use` for presets), the
+  stylesheet URL with its content digest, and the view paths.
+- `lib/active_admin/themes/config.rb`: `SETTINGS` (each with its allowed values, the
+  default first), `PRESETS`, and `Config`, which validates values on assignment.
+- `lib/active_admin/themes/middleware.rb`: serves the stylesheets in use, concatenated,
+  at `/active_admin_themes/<version>/<name>+<name>.css?v=<digest>` with a one-year
+  immutable cache. Only names from `STYLESHEETS` are served.
 - `lib/active_admin/themes/railtie.rb`: inserts the middleware and prepends the
   gem's view paths on `ActiveAdmin::BaseController` and AA's Devise controllers only.
-- `lib/active_admin/themes/assets/*.css`: the CSS. Plain CSS, no build step.
+- `lib/active_admin/themes/assets/<setting>-<value>.css`: one plain-CSS file per
+  non-default value, no build step. They load in `SETTINGS` order, so `style-*` comes
+  last and overrides the `--aat-*` color variables the others define.
 - `app/views/active_admin_themes/<set>/`: AA partial overrides. `base` adds the
-  stylesheet `<link>` after AA's; `classic` swaps in the top-navigation layout.
+  stylesheet `<link>` after AA's; `top` swaps in the top-navigation layout.
 
 ## Rules
 
@@ -52,14 +57,16 @@ Design and roadmap: `docs/PLAN.md`. Read it before changing the public API.
 - Everything CI runs: `bundle exec rake` (unit tests, integration tests, RuboCop).
 - Unit tests (Minitest, no Rails): `bundle exec rake test`, in `test/active_admin/`.
 - Integration tests: `bundle exec rake test:integration`. They boot the dummy app in
-  `test/dummy/` (ActiveAdmin + activeadmin_assets, in-memory SQLite) once per theme
-  setting, each in its own process (`test:integration:none`, `:compact`, `:classic`).
+  `test/dummy/` (ActiveAdmin + activeadmin_assets, in-memory SQLite) once per
+  combination in the Rakefile's `THEMES`, each in its own process
+  (`test:integration:none`, `:compact`, `:classic`, `:top`).
   Other Rails versions: `BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile` (also `rails_8_0`, `rails_8_1`).
 - Lint: `bundle exec rubocop`
 - Dependencies used only by tests go in the `Gemfile`, never in the gemspec.
 - Visual checks use the lab app in `../activeadmin-themes-lab` (AA 4 +
   activeadmin_assets, wide tables, many scopes and filters, a long menu), which loads
-  this gem by path. Start it with `AA_THEME=<name> bin/rails s -p 3100`, then take
+  this gem by path. Start it with `AA_THEME=<preset> bin/rails s -p 3100` or
+  `AA_THEME="navigation=top,density=compact" bin/rails s -p 3100`, then take
   screenshots with `bundle exec ruby script/shots.rb <label> [path]` (`DARK=1` for dark
   mode, `SIZE=390,844` for mobile). Output goes to `tmp/shots/`. Look at the full
   images; macOS `sips` crops from the center.

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# A small ActiveAdmin app, booted the way a real app boots, with the theme from
-# ENV["THEME"] ("none" for no theme). ActiveAdmin's CSS comes from activeadmin_assets.
+# A small ActiveAdmin app, booted the way a real app boots, with the settings from
+# ENV["THEME"] (see config/initializers/active_admin.rb). ActiveAdmin's CSS comes from activeadmin_assets.
 ENV["RAILS_ENV"] = "test"
 ENV["DATABASE_URL"] = "sqlite3::memory:"
 

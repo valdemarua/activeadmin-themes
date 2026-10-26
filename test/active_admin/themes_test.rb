@@ -4,63 +4,107 @@ require "test_helper"
 
 class ThemesTest < Minitest::Test
   def teardown
-    ActiveAdmin::Themes.instance_variable_set(:@theme, nil)
+    ActiveAdmin::Themes.reset!
   end
 
-  def test_no_theme_by_default
-    assert_nil ActiveAdmin::Themes.theme
+  def test_defaults_are_active_admins_own
+    assert_equal({ navigation: :sidebar, density: :default, scopes: :default, style: :default },
+                 ActiveAdmin::Themes.config.to_h)
     assert_nil ActiveAdmin::Themes.stylesheet_href
     assert_empty ActiveAdmin::Themes.view_paths
   end
 
-  def test_use_accepts_strings_and_symbols
-    ActiveAdmin::Themes.use "classic"
+  def test_configure_accepts_strings_and_symbols
+    ActiveAdmin::Themes.configure do |c|
+      c.navigation = "top"
+      c.density = :compact
+    end
 
-    assert_equal :classic, ActiveAdmin::Themes.theme
+    assert_equal :top, ActiveAdmin::Themes.config.navigation
+    assert_equal :compact, ActiveAdmin::Themes.config.density
   end
 
-  def test_use_rejects_unknown_themes
+  def test_configure_rejects_unknown_values
+    error = assert_raises(ArgumentError) { ActiveAdmin::Themes.configure { |c| c.density = :tiny } }
+
+    assert_includes error.message, "density :tiny"
+    assert_includes error.message, ":default, :compact"
+  end
+
+  def test_presets
+    ActiveAdmin::Themes.use :classic
+
+    assert_equal({ navigation: :top, density: :compact, scopes: :chips, style: :classic },
+                 ActiveAdmin::Themes.config.to_h)
+  end
+
+  def test_a_preset_resets_settings_it_does_not_name
+    ActiveAdmin::Themes.use :classic
+    ActiveAdmin::Themes.use "compact"
+
+    assert_equal({ navigation: :sidebar, density: :compact, scopes: :chips, style: :default },
+                 ActiveAdmin::Themes.config.to_h)
+  end
+
+  def test_use_rejects_unknown_presets
     error = assert_raises(ArgumentError) { ActiveAdmin::Themes.use :neon }
 
     assert_includes error.message, ":neon"
     assert_includes error.message, "compact, classic"
   end
 
-  def test_stylesheet_href_is_versioned_and_digested
-    ActiveAdmin::Themes.use :compact
+  def test_stylesheets_are_the_non_default_settings_in_a_fixed_order
+    ActiveAdmin::Themes.configure do |c|
+      c.style = :classic
+      c.density = :compact
+      c.navigation = :top
+    end
 
-    assert_match %r{\A/active_admin_themes/#{Regexp.escape(ActiveAdmin::Themes::VERSION)}/compact\.css\?v=\h{12}\z}o,
+    assert_equal %w[navigation-top density-compact style-classic], ActiveAdmin::Themes.config.stylesheets
+  end
+
+  def test_stylesheet_href_names_the_stylesheets_and_their_digest
+    ActiveAdmin::Themes.use :compact
+    version = Regexp.escape(ActiveAdmin::Themes::VERSION)
+
+    assert_match %r{\A/active_admin_themes/#{version}/density-compact\+scopes-chips\.css\?v=\h{12}\z},
                  ActiveAdmin::Themes.stylesheet_href
   end
 
   def test_digest_follows_the_css
-    ActiveAdmin::Themes.use :compact
-    compact = ActiveAdmin::Themes.digest
-    ActiveAdmin::Themes.use :classic
-
-    refute_equal compact, ActiveAdmin::Themes.digest
+    refute_equal ActiveAdmin::Themes.digest(%w[density-compact]),
+                 ActiveAdmin::Themes.digest(%w[density-compact scopes-chips])
   end
 
-  def test_classic_css_includes_compact_first
-    compact = ActiveAdmin::Themes.css(:compact)
-    classic = ActiveAdmin::Themes.css(:classic)
+  def test_css_concatenates_in_the_given_order
+    density = ActiveAdmin::Themes.css(%w[density-compact])
+    scopes = ActiveAdmin::Themes.css(%w[scopes-chips])
 
-    assert classic.start_with?(compact)
-    assert_operator classic.length, :>, compact.length
+    assert_equal "#{density}\n#{scopes}", ActiveAdmin::Themes.css(%w[density-compact scopes-chips])
   end
 
-  def test_every_theme_has_its_files
-    ActiveAdmin::Themes::THEMES.each_key do |name|
-      ActiveAdmin::Themes.use name
-
-      refute_empty ActiveAdmin::Themes.css(name)
-      ActiveAdmin::Themes.view_paths.each { |path| assert_path_exists path }
-    end
+  def test_every_stylesheet_exists
+    ActiveAdmin::Themes::STYLESHEETS.each { |name| refute_empty ActiveAdmin::Themes.css([name]) }
   end
 
-  def test_view_paths_are_most_specific_first
-    ActiveAdmin::Themes.use :classic
-
-    assert_equal(%w[classic base], ActiveAdmin::Themes.view_paths.map { |path| File.basename(path) })
+  def test_presets_use_known_settings
+    ActiveAdmin::Themes::PRESETS.each_key { |preset| ActiveAdmin::Themes.use preset }
   end
+
+  def test_view_paths_without_top_navigation
+    ActiveAdmin::Themes.configure { |c| c.density = :compact }
+
+    assert_equal %w[base], view_path_names
+  end
+
+  def test_view_paths_with_top_navigation_are_most_specific_first
+    ActiveAdmin::Themes.configure { |c| c.navigation = :top }
+
+    assert_equal %w[top base], view_path_names
+    ActiveAdmin::Themes.view_paths.each { |path| assert_path_exists path }
+  end
+
+  private
+
+  def view_path_names = ActiveAdmin::Themes.view_paths.map { |path| File.basename(path) }
 end

@@ -7,11 +7,17 @@ Minitest::TestTask.create(:test) do |t|
   t.test_globs = ["test/active_admin/**/*_test.rb"]
 end
 
-# The dummy app reads its theme once at boot, so each setting runs in its own process.
-THEMES = %w[none compact classic].freeze
+# The dummy app reads its settings once at boot, so each combination runs in its
+# own process: no settings, both presets, and the top menu in ActiveAdmin's colors.
+THEMES = {
+  none: "none",
+  compact: "compact",
+  classic: "classic",
+  top: "navigation=top,density=compact,scopes=chips"
+}.freeze
 
-THEMES.each do |theme|
-  Minitest::TestTask.create(:"test:integration:#{theme}") do |t|
+THEMES.each do |name, theme|
+  Minitest::TestTask.create(:"test:integration:#{name}") do |t|
     t.test_globs = ["test/integration/**/*_test.rb"]
     t.test_prelude = %(ENV["THEME"] = "#{theme}")
     t.warning = false # ActiveAdmin itself is not -w clean
@@ -19,7 +25,7 @@ THEMES.each do |theme|
 end
 
 desc "Run the integration tests for every theme"
-task "test:integration" => THEMES.map { |theme| "test:integration:#{theme}" }
+task "test:integration" => THEMES.keys.map { |name| "test:integration:#{name}" }
 
 begin
   require "rubocop/rake_task"

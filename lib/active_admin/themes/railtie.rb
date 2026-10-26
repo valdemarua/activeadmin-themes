@@ -9,9 +9,9 @@ module ActiveAdmin
       end
 
       # Only ActiveAdmin's own controllers (admin pages and its Devise pages)
-      # see the theme's partials; the rest of the app is untouched.
+      # see the gem's partials; the rest of the app is untouched.
       config.to_prepare do
-        next unless ActiveAdmin::Themes.theme
+        next if ActiveAdmin::Themes.view_paths.empty?
 
         controllers = [ActiveAdmin::BaseController]
         # ActiveAdmin's Devise controllers raise on load in apps without Devise.

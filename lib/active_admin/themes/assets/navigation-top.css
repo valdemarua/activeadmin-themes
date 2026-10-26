@@ -1,0 +1,105 @@
+/*
+ * navigation: :top
+ *
+ * A top bar with a horizontal menu instead of AA 4's sidebar (markup in
+ * app/views/active_admin_themes/top). Colors are variables with AA's own
+ * palette as defaults; style: :classic overrides them. The markup uses aat-*
+ * classes only, so nothing here depends on Tailwind utilities AA doesn't ship.
+ */
+:root {
+  --aat-bar: var(--color-white);
+  --aat-bar-border: var(--color-gray-200);
+  --aat-bar-brand: var(--color-gray-950);
+  --aat-bar-text: var(--color-gray-600);
+  --aat-bar-text-hover: var(--color-gray-900);
+  --aat-bar-hover: var(--color-gray-50);
+  --aat-bar-current: var(--color-gray-100);
+  --aat-bar-current-text: var(--color-gray-900);
+  --aat-menu: var(--color-white);
+  --aat-menu-text: var(--color-gray-700);
+  --aat-menu-hover: var(--color-gray-100);
+  --aat-menu-hover-text: var(--color-gray-900);
+}
+
+/* Dark mode: AA toggles .dark on <html>. */
+:root.dark {
+  --aat-bar: var(--color-gray-950);
+  --aat-bar-border: rgb(255 255 255 / 0.1);
+  --aat-bar-brand: var(--color-white);
+  --aat-bar-text: var(--color-gray-400);
+  --aat-bar-text-hover: var(--color-white);
+  --aat-bar-hover: rgb(255 255 255 / 0.04);
+  --aat-bar-current: rgb(255 255 255 / 0.08);
+  --aat-bar-current-text: var(--color-white);
+  --aat-menu: var(--color-gray-800);
+  --aat-menu-text: var(--color-gray-300);
+  --aat-menu-hover: rgb(255 255 255 / 0.06);
+  --aat-menu-hover-text: var(--color-white);
+}
+
+/* Top bar */
+.aat-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.375rem 1rem;
+  background: var(--aat-bar);
+  border-bottom: 1px solid var(--aat-bar-border);
+  color: var(--aat-bar-text);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.aat-header__brand { font-size: var(--text-lg); font-weight: 600; white-space: nowrap; color: var(--aat-bar-brand); }
+.aat-header__tools { margin-inline-start: auto; display: flex; align-items: center; gap: 0.75rem; white-space: nowrap; }
+.aat-header__link { color: var(--aat-bar-text); text-decoration: none; font-size: var(--text-sm); }
+.aat-header__link:hover { color: var(--aat-bar-text-hover); }
+.aat-header__icon { color: var(--aat-bar-text); display: inline-flex; padding: 0.25rem; }
+.aat-header__icon:hover { color: var(--aat-bar-text-hover); }
+
+/* Horizontal menu: wraps onto a second line when there are many items,
+   like AA 3; on narrow screens it scrolls sideways instead. */
+.aat-nav { flex: 1; min-width: 0; }
+.aat-nav > ul { display: flex; flex-wrap: wrap; gap: 0.125rem 0.25rem; list-style: none; margin: 0; padding: 0; }
+/* Same shape as AA's buttons and the scope chips: radius-md, tight padding. */
+.aat-nav__item {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  padding: 0.1875rem 0.5rem; border-radius: var(--radius-md);
+  color: var(--aat-bar-text); font-size: var(--text-sm); text-decoration: none; white-space: nowrap;
+  background: none; border: 0; cursor: pointer;
+}
+.aat-nav__item:hover, .aat-nav__group:focus-within > .aat-nav__item {
+  background: var(--aat-bar-hover);
+  color: var(--aat-bar-text-hover);
+}
+.aat-nav__item.is-current, .aat-nav__group.is-current > .aat-nav__item {
+  background: var(--aat-bar-current);
+  color: var(--aat-bar-current-text);
+}
+
+/* Dropdowns open on hover and on keyboard focus (focus-within): no JS. */
+.aat-nav__group { position: relative; }
+.aat-nav__dropdown {
+  display: none; position: absolute; top: 100%; inset-inline-start: 0; z-index: 40;
+  min-width: 12rem; margin-top: 0.25rem; padding: 0.25rem; list-style: none;
+  background: var(--aat-menu); border-radius: var(--radius-lg);
+  box-shadow: 0 10px 25px rgb(0 0 0 / 0.18), 0 0 0 1px rgb(0 0 0 / 0.05);
+}
+/* Bridge the gap so the menu doesn't close on the way down. */
+.aat-nav__dropdown::before { content: ""; position: absolute; inset: -0.5rem 0 auto; height: 0.5rem; }
+.aat-nav__group:hover > .aat-nav__dropdown,
+.aat-nav__group:focus-within > .aat-nav__dropdown { display: block; }
+.aat-nav__dropdown-item {
+  display: block; padding: 0.375rem 0.625rem; border-radius: var(--radius-md);
+  color: var(--aat-menu-text); font-size: var(--text-sm); text-decoration: none;
+}
+.aat-nav__dropdown-item:hover, .aat-nav__dropdown-item.is-current {
+  background: var(--aat-menu-hover);
+  color: var(--aat-menu-hover-text);
+}
+
+@media (max-width: 767px) {
+  .aat-header { flex-wrap: wrap; }
+  .aat-nav { order: 3; flex-basis: 100%; overflow-x: auto; }
+  .aat-nav > ul { flex-wrap: nowrap; }
+}

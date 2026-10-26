@@ -1,0 +1,29 @@
+/*
+ * style: :classic
+ *
+ * Colors and surfaces only, after ActiveAdmin 1-3: a flat gray top bar (with
+ * navigation: :top) and a light gray title bar.
+ */
+/* Both selectors: navigation-top.css sets dark colors on :root.dark. */
+:root, :root.dark {
+  --aat-bar: var(--color-gray-600);
+  --aat-bar-border: transparent;
+  --aat-bar-brand: var(--color-white);
+  --aat-bar-text: var(--color-gray-100);
+  --aat-bar-text-hover: var(--color-white);
+  --aat-bar-hover: rgb(255 255 255 / 0.1);
+  --aat-bar-current: rgb(255 255 255 / 0.28);   /* lighter than the bar */
+  --aat-bar-current-text: var(--color-white);
+}
+:root.dark { --aat-bar: var(--color-gray-800); }
+
+/* Title bar: AA 3's light gray band. */
+[data-test-page-header] {
+  background: linear-gradient(#f6f7f8, #e9ebed);
+  border-bottom: 1px solid #d5d8dc;
+  margin-bottom: 1.25rem;
+}
+.dark [data-test-page-header] {
+  background: linear-gradient(#1a1d21, #15171a);
+  border-bottom-color: rgb(255 255 255 / 0.08);
+}

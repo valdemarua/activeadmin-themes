@@ -8,4 +8,15 @@ ActiveAdmin.setup do |config|
   config.batch_actions = true
 end
 
-ActiveAdmin::Themes.use ENV.fetch("THEME") unless ENV.fetch("THEME", "none") == "none"
+# ENV["THEME"]: "none", a preset ("compact"), or settings ("navigation=top,density=compact").
+theme = ENV.fetch("THEME", "none")
+if ActiveAdmin::Themes::PRESETS.key?(theme.to_sym)
+  ActiveAdmin::Themes.use theme
+elsif theme != "none"
+  ActiveAdmin::Themes.configure do |c|
+    theme.split(",").each do |setting|
+      name, value = setting.split("=")
+      c.public_send(:"#{name}=", value)
+    end
+  end
+end

@@ -1,18 +1,8 @@
 # activeadmin-themes
 
-Alternative looks for [ActiveAdmin](https://github.com/activeadmin/activeadmin) 4.
-
-Configurable layout and density for ActiveAdmin 4: a sidebar or top navigation menu,
-compact sizing and compact scopes. Layered on ActiveAdmin's own CSS and views, with no
-fork and no CSS build.
-
-- **Compact**: ActiveAdmin 4's own layout (sidebar menu), about 25% denser: smaller
-  spacing, type and table rows, a narrower filter column, and scopes shown as small chips.
-- **Classic**: the ActiveAdmin 1–3 arrangement on ActiveAdmin 4: a gray top bar with
-  a horizontal menu (dropdowns on hover and keyboard focus, no JavaScript), a light
-  title bar and filters on the right. Includes Compact's sizing.
-
-Both support light and dark mode and mobile widths.
+Configurable layout and density for [ActiveAdmin](https://github.com/activeadmin/activeadmin) 4:
+a sidebar or top navigation menu, compact sizing and compact scopes. Layered on
+ActiveAdmin's own CSS and views, with no fork and no CSS build.
 
 ## Requirements
 
@@ -33,20 +23,6 @@ gem "activeadmin-themes"
 
 ```ruby
 # config/initializers/active_admin.rb
-ActiveAdmin::Themes.use :compact   # or :classic
-```
-
-Restart the server. Without `use`, the gem changes nothing.
-
-## Settings
-
-> Coming in the next release. Today the gem has the two fixed themes above:
-> `:compact` and `:classic` are the combinations marked in the table.
-
-Each part of the look is a separate setting, so you can combine them freely, e.g. a
-top menu in ActiveAdmin's own colors at compact density:
-
-```ruby
 ActiveAdmin::Themes.configure do |c|
   c.navigation = :top
   c.density    = :compact
@@ -54,15 +30,30 @@ ActiveAdmin::Themes.configure do |c|
 end
 ```
 
-| Setting | Values | Default | What it changes | Compact | Classic |
-|---|---|---|---|---|---|
-| `navigation` | `:sidebar`, `:top` | `:sidebar` | Sidebar menu, or a horizontal top bar with dropdowns and a mobile menu | `:sidebar` | `:top` |
-| `density` | `:default`, `:compact` | `:default` | Spacing, type size, table rows, filter column width, form control padding | `:compact` | `:compact` |
-| `scopes` | `:default`, `:chips` | `:default` | ActiveAdmin's scope buttons, or small chips that fit more per row | `:chips` | `:chips` |
-| `style` | `:default`, `:classic` | `:default` | Colors and surfaces only: ActiveAdmin's own, or a gray top bar and title bar | `:default` | `:classic` |
+Restart the server. Without configuration, the gem changes nothing.
 
-Every default is ActiveAdmin's own behavior, so an empty `configure` block changes
-nothing. All settings support light and dark mode.
+## Settings
+
+Each part of the look is a separate setting, so you can combine them freely.
+
+| Setting | Values | Default | What it changes |
+|---|---|---|---|
+| `navigation` | `:sidebar`, `:top` | `:sidebar` | The sidebar menu, or a horizontal top bar with dropdowns (on hover and keyboard focus, no JavaScript). On narrow screens the top menu scrolls sideways. |
+| `density` | `:default`, `:compact` | `:default` | About 25% denser: spacing, type size, table rows, filter column width, form control padding |
+| `scopes` | `:default`, `:chips` | `:default` | ActiveAdmin's joined scope buttons, or separate chips that wrap cleanly when there are many |
+| `style` | `:default`, `:classic` | `:default` | Colors and surfaces only: ActiveAdmin's own, or a gray top bar and a light gray title bar, after ActiveAdmin 1–3 |
+
+Every default is ActiveAdmin's own behavior, so leaving a setting out keeps
+ActiveAdmin's look for that part. All settings support light and dark mode.
+
+### Presets
+
+`use` sets a named combination, and resets the settings it doesn't name:
+
+```ruby
+ActiveAdmin::Themes.use :compact   # density: :compact, scopes: :chips
+ActiveAdmin::Themes.use :classic   # navigation: :top, density: :compact, scopes: :chips, style: :classic
+```
 
 ## With or without activeadmin_assets
 
@@ -74,11 +65,12 @@ The gem works the same however ActiveAdmin's own CSS reaches the browser:
 - **Without it**: your app builds ActiveAdmin's CSS with Tailwind, as ActiveAdmin's
   installer sets up. Nothing extra is needed either.
 
-The gem never goes through your asset pipeline. Its CSS is plain CSS served by a small
-Rack middleware from the gem at `/active_admin_themes/<version>/<theme>.css`, with a
-content digest in the URL and a one-year cache. The Classic markup only uses its own
-`aat-*` classes, styled by that CSS, plus Tailwind classes ActiveAdmin's own layout
-already uses, so nothing has to be added to a Tailwind build.
+The gem never goes through your asset pipeline. Each setting that differs from the
+default adds a small plain-CSS file. A Rack middleware serves the ones in use from the
+gem as one stylesheet (e.g. `/active_admin_themes/<version>/density-compact+scopes-chips.css`),
+with a content digest in the URL and a one-year cache. The top navigation markup only
+uses its own `aat-*` classes, styled by that CSS, plus Tailwind classes ActiveAdmin's
+own layout already uses, so nothing has to be added to a Tailwind build.
 
 ## How it works
 
@@ -87,22 +79,23 @@ already uses, so nothing has to be added to a Tailwind build.
   rescales the whole UI; a few selectors handle the rest.
 - **Views**: the gem's partials are added to the view path of ActiveAdmin's
   controllers only (admin pages and ActiveAdmin's Devise pages). `_html_head` adds
-  the theme stylesheet after ActiveAdmin's; Classic also overrides the layout,
+  the stylesheet after ActiveAdmin's; `navigation: :top` also overrides the layout,
   `_site_header` and `_main_navigation`. Your own overrides in `app/views` still win,
   and the rest of your app is untouched.
 
 ## Customizing
 
 The CSS is loaded after ActiveAdmin's, so your own admin CSS can override it as
-usual. Classic's colors are CSS variables on `.aat-classic` (`--aat-bar`,
-`--aat-bar-text`, `--aat-bar-hover`, `--aat-bar-current`).
+usual. The top bar's colors are CSS variables on `:root` (and `:root.dark` for dark
+mode): `--aat-bar`, `--aat-bar-border`, `--aat-bar-brand`, `--aat-bar-text`,
+`--aat-bar-text-hover`, `--aat-bar-hover`, `--aat-bar-current`,
+`--aat-bar-current-text`, and `--aat-menu*` for the dropdowns.
 
 ## Status
 
-Early. Tested against ActiveAdmin 4.0.0.beta23 and activeadmin_assets 1.3.0. Since
-the gem builds on ActiveAdmin's markup and class names, check your admin after
-upgrading ActiveAdmin while 4.x is in beta. The settings above will replace the two fixed
-themes; see [docs/PLAN.md](docs/PLAN.md).
+Early. Tested against ActiveAdmin 4.0.0.beta23 and activeadmin_assets 1.3.0, on
+Rails 7.2, 8.0 and 8.1. Since the gem builds on ActiveAdmin's markup and class names,
+check your admin after upgrading ActiveAdmin while 4.x is in beta.
 
 ## License
 

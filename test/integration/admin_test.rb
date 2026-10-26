@@ -5,7 +5,7 @@ require_relative "../dummy/application"
 require "test_helper"
 
 class AdminTest < Minitest::Test
-  THEME = ENV.fetch("THEME", "none")
+  CONFIG = ActiveAdmin::Themes.config
 
   def test_dashboard_renders
     status, html = get("/admin")
@@ -27,7 +27,7 @@ class AdminTest < Minitest::Test
   def test_stylesheet_link
     _, html = get("/admin")
 
-    if THEME == "none"
+    if CONFIG.stylesheets.empty?
       refute_includes html, "/active_admin_themes/"
     else
       aa = html.index(/<link[^>]+active_admin[^>]*\.css/)
@@ -39,17 +39,17 @@ class AdminTest < Minitest::Test
   end
 
   def test_theme_stylesheet_is_served_by_the_app
-    skip "no theme" if THEME == "none"
+    skip "no settings" if CONFIG.stylesheets.empty?
     status, css = get(ActiveAdmin::Themes.stylesheet_href)
 
     assert_equal 200, status
     assert_equal ActiveAdmin::Themes.css, css
   end
 
-  def test_top_navigation_only_in_classic
+  def test_top_navigation
     _, html = get("/admin/products")
 
-    if THEME == "classic"
+    if CONFIG.navigation == :top
       assert_includes html, "aat-nav"
       assert_includes html, "Catalog"
     else
