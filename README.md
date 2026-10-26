@@ -18,8 +18,10 @@ Both support light and dark mode and mobile widths.
 ## Requirements
 
 - ActiveAdmin 4.x (`>= 4.0.0.beta`, `< 5`). ActiveAdmin 3 and older are not supported.
-- Rails 7.1 or newer
+- Rails 7.2 or newer
 - Ruby 3.3 or newer
+
+These match ActiveAdmin 4's own requirements.
 
 The only runtime dependencies are `activeadmin` and `railties`.
 

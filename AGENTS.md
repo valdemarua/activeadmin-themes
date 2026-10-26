@@ -33,7 +33,7 @@ Design and roadmap: `docs/PLAN.md`. Read it before changing the public API.
 - Override as few AA partials as possible. Each copied partial must be re-checked
   against AA on every AA upgrade. App-level view overrides must still win.
 - Runtime dependencies are `activeadmin` and `railties` only. Ask before adding another.
-- Support Ruby >= 3.3 and Rails >= 7.1.
+- Support the same Ruby and Rails versions as ActiveAdmin 4 (today Ruby >= 3.3, Rails >= 7.2).
 - The gem is client-agnostic. Never reference specific client apps or sites in code,
   tests, docs or issues. Names and examples are in English and generic.
 
