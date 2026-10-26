@@ -16,8 +16,8 @@ module ActiveAdmin
   # a few partial overrides.
   module Themes
     THEMES = {
-      compact: {stylesheets: %w[compact], views: %w[base]},
-      classic: {stylesheets: %w[compact classic], views: %w[classic base]}
+      compact: { stylesheets: %w[compact], views: %w[base] },
+      classic: { stylesheets: %w[compact classic], views: %w[classic base] }
     }.freeze
 
     ROOT = File.expand_path("../..", __dir__)
@@ -27,7 +27,10 @@ module ActiveAdmin
 
       def use(name)
         name = name.to_sym
-        raise ArgumentError, "unknown ActiveAdmin theme #{name.inspect} (#{THEMES.keys.join(", ")})" unless THEMES.key?(name)
+        unless THEMES.key?(name)
+          raise ArgumentError,
+                "unknown ActiveAdmin theme #{name.inspect} (#{THEMES.keys.join(", ")})"
+        end
 
         @theme = name
       end
@@ -44,7 +47,9 @@ module ActiveAdmin
       def stylesheets = THEMES.fetch(theme)[:stylesheets]
 
       def css(name = theme)
-        THEMES.fetch(name)[:stylesheets].map { |file| File.read(File.join(Middleware::ASSETS, "#{file}.css")) }.join("\n")
+        THEMES.fetch(name)[:stylesheets].map do |file|
+          File.read(File.join(Middleware::ASSETS, "#{file}.css"))
+        end.join("\n")
       end
 
       def digest = Digest::SHA256.hexdigest(css)[0, 12]

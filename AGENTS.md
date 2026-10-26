@@ -49,6 +49,14 @@ Design and roadmap: `docs/PLAN.md`. Read it before changing the public API.
 ## Tools
 
 - Setup: `bundle install`
+- Everything CI runs: `bundle exec rake` (unit tests, integration tests, RuboCop).
+- Unit tests (Minitest, no Rails): `bundle exec rake test`, in `test/active_admin/`.
+- Integration tests: `bundle exec rake test:integration`. They boot the dummy app in
+  `test/dummy/` (ActiveAdmin + activeadmin_assets, in-memory SQLite) once per theme
+  setting, each in its own process (`test:integration:none`, `:compact`, `:classic`).
+  Other Rails versions: `BUNDLE_GEMFILE=gemfiles/rails_7_2.gemfile` (also `rails_8_0`, `rails_8_1`).
+- Lint: `bundle exec rubocop`
+- Dependencies used only by tests go in the `Gemfile`, never in the gemspec.
 - Visual checks use the lab app in `../activeadmin-themes-lab` (AA 4 +
   activeadmin_assets, wide tables, many scopes and filters, a long menu), which loads
   this gem by path. Start it with `AA_THEME=<name> bin/rails s -p 3100`, then take
