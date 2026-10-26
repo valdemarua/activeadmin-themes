@@ -12,7 +12,7 @@
   --aat-bar: #4b5563;               /* gray-600 */
   --aat-bar-text: #f3f4f6;
   --aat-bar-hover: rgb(255 255 255 / 0.1);
-  --aat-bar-current: rgb(0 0 0 / 0.22);   /* darker than the bar: a pressed tab */
+  --aat-bar-current: rgb(255 255 255 / 0.28);   /* lighter than the bar */
 }
 
 /* Top bar */
