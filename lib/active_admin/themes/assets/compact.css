@@ -63,9 +63,7 @@ body { font-size: var(--text-sm); }
   padding-inline: calc(var(--spacing) * 3);
   padding-block: calc(var(--spacing) * 1.5);
 }
-/* Selected: a grey one step darker than AA's (gray-100 is too faint among
-   many chips), with a matching border. */
-.scopes .index-button-selected,
-.scopes .index-button-selected:hover { background-color: var(--color-gray-200); border-color: var(--color-gray-400); }
-.dark .scopes .index-button-selected,
-.dark .scopes .index-button-selected:hover { background-color: var(--color-gray-700); border-color: var(--color-gray-500); }
+/* Selected: AA's own background, with a darker border so it stands out
+   among many chips. */
+.scopes .index-button-selected { border-color: var(--color-gray-400); }
+.dark .scopes .index-button-selected { border-color: var(--color-gray-500); }
