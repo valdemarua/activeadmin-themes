@@ -40,7 +40,7 @@ Each part of the look is a separate setting, so you can combine them freely.
 |---|---|---|---|
 | `navigation` | `:sidebar`, `:top` | `:sidebar` | The sidebar menu, or a horizontal top bar with dropdowns (on hover and keyboard focus, no JavaScript). On narrow screens the top menu scrolls sideways. |
 | `density` | `:default`, `:compact` | `:default` | About 25% denser: spacing, type size, table rows, filter column width, form control padding |
-| `scopes` | `:default`, `:chips` | `:default` | ActiveAdmin's joined scope buttons, or separate chips that wrap cleanly when there are many |
+| `scopes` | `:default`, `:chips` | `:default` | ActiveAdmin's joined scope buttons, or separate, smaller chips with plain-text counts that wrap cleanly when there are many |
 | `style` | `:default`, `:classic` | `:default` | Colors and surfaces only: ActiveAdmin's own, or a look after ActiveAdmin 1–3: a gray top bar, light gray gradient headers (title bar, tables, panels, a boxed filters panel), striped rows, gray buttons that lighten on hover and muted steel-blue links |
 
 Every default is ActiveAdmin's own behavior, so leaving a setting out keeps

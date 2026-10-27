@@ -4,15 +4,25 @@
  * AA joins the scopes into one segmented control (shared 1px borders, only the
  * outer ends rounded). When many scopes wrap onto several rows the rows don't
  * line up and the borders look broken. Separate rounded chips with a small gap
- * wrap cleanly.
+ * wrap cleanly. Smaller than AA's buttons, with the count as plain text, so a
+ * long list of scopes stays quiet next to the table.
  */
 .scopes .index-button-group { gap: 0.25rem; }
 .scopes .index-button-group > * { margin-inline-start: 0; }
 .scopes .index-button {
   border-radius: var(--radius-md);
-  padding-inline: calc(var(--spacing) * 3);
-  padding-block: calc(var(--spacing) * 1.5);
+  padding-inline: calc(var(--spacing) * 2.5);
+  padding-block: calc(var(--spacing) * 1);
+  font-size: var(--text-xs);
 }
+/* The count as plain muted text instead of a pill inside the chip. */
+.scopes .scopes-count {
+  background: none;
+  padding: 0;
+  margin-inline-start: calc(var(--spacing) * 1.5);
+  color: var(--color-gray-500);
+}
+.dark .scopes .scopes-count { background: none; color: var(--color-gray-400); }
 /* Selected: AA's own background, with a darker border so it stands out
    among many chips. */
 .scopes .index-button-selected { border-color: var(--color-gray-300); }
