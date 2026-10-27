@@ -2,9 +2,9 @@
  * style: :classic
  *
  * Colors and surfaces only, after ActiveAdmin 1-3: a flat gray top bar (with
- * navigation: :top), light gray gradient headers, gray buttons and muted
- * steel-blue links. Not a copy of the old theme: the shapes and type stay
- * ActiveAdmin 4's.
+ * navigation: :top), light gray headers, gray buttons and muted steel-blue
+ * links. Not a copy of the old theme: flat colors, and the shapes and type
+ * stay ActiveAdmin 4's.
  *
  * All colors are the variables below; the rules after them only use these
  * variables, so changing the look means changing the variables.
@@ -25,16 +25,16 @@
 
 :root {
   /* Headers: the title bar, table headers, panel titles, the filters title. */
-  --aat-header: linear-gradient(var(--color-gray-50), var(--color-gray-200));
-  --aat-header-border: var(--color-gray-300);
+  --aat-header: var(--color-gray-100);
+  --aat-header-border: var(--color-gray-200);
   --aat-header-text: var(--color-gray-700);
 
   /* Primary buttons, checkboxes, the current page. Lighter on hover. */
   --aat-primary: var(--color-gray-600);
   --aat-primary-hover: var(--color-gray-500);
 
-  /* Secondary raised buttons ("New ..." action items). Lighter on hover. */
-  --aat-button: linear-gradient(var(--color-white), var(--color-gray-100));
+  /* Secondary buttons ("New ..." action items). Lighter on hover. */
+  --aat-button: var(--color-gray-50);
   --aat-button-hover: var(--color-white);
   --aat-button-border: var(--color-gray-300);
   --aat-button-text: var(--color-gray-700);
@@ -58,13 +58,11 @@
 
 :root.dark {
   --aat-bar: var(--color-gray-800);
-  --aat-header: linear-gradient(var(--color-gray-800), var(--color-gray-900));
+  --aat-header: var(--color-gray-900);
   --aat-header-border: rgb(255 255 255 / 0.08);
   --aat-header-text: var(--color-gray-200);
-  --aat-primary: var(--color-gray-600);
-  --aat-primary-hover: var(--color-gray-500);
-  --aat-button: linear-gradient(var(--color-gray-700), var(--color-gray-800));
-  --aat-button-hover: linear-gradient(var(--color-gray-600), var(--color-gray-700));
+  --aat-button: var(--color-gray-800);
+  --aat-button-hover: var(--color-gray-700);
   --aat-button-border: var(--color-gray-600);
   --aat-button-text: var(--color-gray-100);
   --aat-button-hover-text: var(--color-white);
@@ -78,7 +76,6 @@
   margin-bottom: 1.25rem;
 }
 .data-table thead > tr > th,
-.attributes-table tbody > tr > th,
 .panel-title {
   background: var(--aat-header);
   color: var(--aat-header-text);

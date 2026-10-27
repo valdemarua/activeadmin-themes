@@ -41,7 +41,7 @@ Each part of the look is a separate setting, so you can combine them freely.
 | `navigation` | `:sidebar`, `:top` | `:sidebar` | The sidebar menu, or a horizontal top bar with dropdowns (on hover and keyboard focus, no JavaScript). On narrow screens the top menu scrolls sideways. |
 | `density` | `:default`, `:compact` | `:default` | About 25% denser: spacing, type size, table rows, filter column width, form control padding |
 | `scopes` | `:default`, `:chips` | `:default` | ActiveAdmin's joined scope buttons, or separate, smaller chips with plain-text counts that wrap cleanly when there are many |
-| `style` | `:default`, `:classic` | `:default` | Colors and surfaces only: ActiveAdmin's own, or a look after ActiveAdmin 1–3: a gray top bar, light gray gradient headers (title bar, tables, panels, a boxed filters panel), striped rows, gray buttons that lighten on hover and muted steel-blue links |
+| `style` | `:default`, `:classic` | `:default` | Colors and surfaces only: ActiveAdmin's own, or a look after ActiveAdmin 1–3: a gray top bar, light gray headers (title bar, tables, panels, a boxed filters panel), striped rows, gray buttons that lighten on hover and muted steel-blue links |
 
 Every default is ActiveAdmin's own behavior, so leaving a setting out keeps
 ActiveAdmin's look for that part. All settings support light and dark mode.
@@ -98,7 +98,7 @@ usual. Colors are CSS variables on `:root` (and `:root.dark` for dark mode):
 - Top bar (`navigation: :top`): `--aat-bar`, `--aat-bar-border`, `--aat-bar-brand`,
   `--aat-bar-text`, `--aat-bar-text-hover`, `--aat-bar-hover`, `--aat-bar-current`,
   `--aat-bar-current-text`, and `--aat-menu*` for the dropdowns.
-- `style: :classic`: `--aat-header*` (title bar, table and panel headers),
+- `style: :classic`: `--aat-header*` (title bar, table and panel headers, filters),
   `--aat-primary*` (submit buttons, checkboxes, current page), `--aat-button*`
   (action items), `--aat-stripe` (table rows). Links use ActiveAdmin's own
   `--color-blue-*` variables.
