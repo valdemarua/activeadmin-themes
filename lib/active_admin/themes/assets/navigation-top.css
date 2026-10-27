@@ -89,6 +89,8 @@
 .aat-nav__dropdown::before { content: ""; position: absolute; inset: -0.5rem 0 auto; height: 0.5rem; }
 .aat-nav__group:hover > .aat-nav__dropdown,
 .aat-nav__group:focus-within > .aat-nav__dropdown { display: block; }
+/* A small gap so the hover and current backgrounds don't touch. */
+.aat-nav__dropdown > li + li { margin-top: 0.125rem; }
 .aat-nav__dropdown-item {
   display: block; padding: 0.375rem 0.625rem; border-radius: var(--radius-md);
   color: var(--aat-menu-text); font-size: var(--text-sm); text-decoration: none;
