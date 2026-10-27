@@ -17,7 +17,9 @@ Design and roadmap: `docs/PLAN.md`. Read it before changing the public API.
   gem's view paths on `ActiveAdmin::BaseController` and AA's Devise controllers only.
 - `lib/active_admin/themes/assets/<setting>-<value>.css`: one plain-CSS file per
   non-default value, no build step. They load in `SETTINGS` order, so `style-*` comes
-  last and overrides the `--aat-*` color variables the others define.
+  last and overrides the `--aat-*` color variables the others define. A `style-*`
+  file puts every color in `--aat-*` variables at the top (light, then dark) and its
+  rules use only those variables, so a new style starts by copying the variables.
 - `app/views/active_admin_themes/<set>/`: AA partial overrides. `base` adds the
   stylesheet `<link>` after AA's; `top` swaps in the top-navigation layout.
 
